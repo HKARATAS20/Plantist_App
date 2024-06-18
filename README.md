@@ -1,46 +1,28 @@
-# Project Name
+# Plantist App
 
-Describe your project briefly here.
+A planning app that allows users to create and view reminders with also the ability to save any photos or files in the reminders. Reminders may have a priority and they are sorted by their prirorities. The reminders are grouped by their dates and can be completed or deleted.
 
 ## Screenshots
-
-Include screenshots of your project in action.
-
-1. **Screenshot 1**
-   ![Screenshot 1](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.10.20.png)
-
-2. **Screenshot 2**
-   ![Screenshot 2](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.11.17.png)
-
-3. **Screenshot 3**
-   ![Screenshot 3](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.11.30.png)
-
-4. **Screenshot 4**
-   ![Screenshot 4](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.24.png)
-
-5. **Screenshot 5**
-   ![Screenshot 5](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.32.png)
-
-6. **Screenshot 6**
-   ![Screenshot 6](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.39.png)
-
-7. **Screenshot 7**
-   ![Screenshot 7](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.45.png)
-
-8. **Screenshot 8**
-   ![Screenshot 8](screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.24.07.png)
+<div style="display: flex; flex-wrap: wrap;">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.10.20.png" alt="Screenshot 1" width="250">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.11.17.png" alt="Screenshot 2" width="250">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.11.30.png" alt="Screenshot 3" width="250">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.24.png" alt="Screenshot 4" width="250">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.32.png" alt="Screenshot 5" width="250">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.39.png" alt="Screenshot 6" width="250">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.23.45.png" alt="Screenshot 7" width="250">
+    <img src="screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20Max%20-%202024-06-18%20at%2019.24.07.png" alt="Screenshot 8" width="250">
+</div>
 
 ## Installation
 
-Provide instructions on how to install and use your project if applicable.
+The project can be run by executing "flutter run" command inside the plantist_app folder. It can be run both on iOS and Android.
 
 ## Usage
 
-Provide usage examples and how to use your project.
+Users can sign up using their emails and this process is managed by firebase authentication. Users can sign in or reset their passwords if needed. After signin in each user has acess to their own reminders and have the ability to upload attachments.
 
-## Contributing
 
-If you want others to contribute to your project, include guidelines here.
 
 ## License
 
