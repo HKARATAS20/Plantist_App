@@ -80,17 +80,34 @@ class TodoItemWidget extends StatelessWidget {
   }
 
   Widget _buildSubtitle(BuildContext context) {
+    List<Widget> subtitleWidgets = [];
+
     if (todo.fileUrl != null) {
-      return const Row(
-        children: [
-          Icon(Icons.attach_file, color: Colors.grey, size: 18),
-          SizedBox(width: 4),
-          Text('1 attachment', style: TextStyle(color: Colors.grey)),
-        ],
-      );
-    } else {
-      return const SizedBox.shrink();
+      subtitleWidgets.addAll([
+        const Row(
+          children: [
+            Icon(Icons.attach_file, color: Colors.grey, size: 18),
+            SizedBox(width: 4),
+            Text('1 attachment', style: TextStyle(color: Colors.grey)),
+          ],
+        ),
+        const SizedBox(height: 4),
+      ]);
     }
+
+    if (todo.priority != "None") {
+      subtitleWidgets.add(
+        Text(
+          todo.priority,
+          style: const TextStyle(color: Colors.grey),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: subtitleWidgets,
+    );
   }
 
   Widget _buildTrailing(BuildContext context) {
