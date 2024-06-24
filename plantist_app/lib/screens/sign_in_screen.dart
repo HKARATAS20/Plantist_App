@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,8 +10,10 @@ import 'package:plantist_app/reusable_widgets/text/reusable_subtitle_text.dart';
 import 'package:plantist_app/reusable_widgets/text/reusable_title_text.dart';
 import 'package:plantist_app/screens/reset_password.dart';
 import 'package:plantist_app/utils/auth_manager.dart';
+import 'package:plantist_app/utils/biometric_auth_manager.dart';
 
 import '../controllers/email_validation_controller.dart';
+import '../reusable_widgets/button/ui_button.dart';
 import 'home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -23,11 +26,16 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
-
   final AuthController authController = Get.put(AuthController());
   final AuthManager _authManager = AuthManager();
   final EmailValidationController _emailValidationController =
       Get.put(EmailValidationController());
+  final BiometricAuthManager _biometricAuthManager = BiometricAuthManager();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -90,12 +98,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   scrollPadding: MediaQuery.of(context).viewInsets.bottom,
                   onChanged: (_) => _updateButtonState(),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
                 forgetPassword(context),
                 Obx(() {
                   return colorChangingButton(
                     context: context,
-                    title: "Sign In",
+                    title: "Sign In Using Email and Password",
                     icon: null,
                     backgroundColor: authController.isButtonEnabled.value
                         ? const Color.fromARGB(255, 15, 22, 39)
@@ -110,6 +118,16 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                   );
                 }),
+                firebaseUIButton(
+                  context,
+                  "Sign In Using FaceID",
+                  null,
+                  const Color.fromARGB(255, 15, 22, 39),
+                  Colors.white,
+                  onTap: () {
+                    _beginBiometricAuthentication();
+                  },
+                ),
                 const SizedBox(height: 10),
                 RichText(
                   text: TextSpan(
@@ -149,6 +167,24 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
+  Widget forgetPassword(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ResetPassword()),
+          );
+        },
+        child: const Text(
+          'Forgot password?',
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
+    );
+  }
+
   void _updateButtonState() {
     authController.updateButtonState(
       _emailTextController.text,
@@ -164,6 +200,7 @@ class _SignInScreenState extends State<SignInScreen> {
       final user = await _authManager.signIn(email, password);
       if (user != null) {
         print("Sign-in successful. User: ${user.email}");
+        await _biometricAuthManager.storeCredentials(email, password);
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -177,25 +214,66 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
-  Widget forgetPassword(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 35,
-      alignment: Alignment.bottomRight,
-      child: TextButton(
-        child: const Text(
-          "Forgot password?",
-          style: TextStyle(color: Colors.blue),
-          textAlign: TextAlign.right,
+  void _beginBiometricAuthentication() async {
+    bool authenticated =
+        await _biometricAuthManager.authenticateWithBiometrics();
+    if (authenticated) {
+      _signInWithBiometrics();
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Biometric authentication failed'),
+          content: const Text('Please use email and password to sign in.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
         ),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ResetPassword(),
+      );
+    }
+  }
+
+  void _signInWithBiometrics() async {
+    try {
+      final credentials = await _biometricAuthManager.retrieveCredentials();
+      final email = credentials['email'] ?? '';
+      final password = credentials['password'] ?? '';
+
+      if (email.isNotEmpty && password.isNotEmpty) {
+        final user = await _authManager.signIn(email, password);
+        if (user != null) {
+          print("Sign-in successful with biometrics. User: ${user.email}");
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+            (_) => false,
+          );
+        } else {
+          print("Sign-in failed with biometrics.");
+        }
+      } else {
+        print('No stored credentials found. Prompting user for credentials.');
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('No stored credentials found'),
+            content: const Text('Please use email and password to sign in.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ),
-      ),
-    );
+        );
+      }
+    } catch (error) {
+      print("Error signing in with biometrics: ${error.toString()}");
+    }
   }
 
   void _openBottomSheet(String text) {
@@ -206,13 +284,13 @@ class _SignInScreenState extends State<SignInScreen> {
         return Container(
           height: MediaQuery.of(context).size.height * 0.75,
           width: MediaQuery.of(context).size.width * 0.9,
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Text(
                 text,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
           ),
@@ -247,6 +325,5 @@ class _SignInScreenState extends State<SignInScreen> {
 
     Limitation of liability:
     - We are not liable for any damages arising out of the use or inability to use the app.
-
-  """;
+""";
 }

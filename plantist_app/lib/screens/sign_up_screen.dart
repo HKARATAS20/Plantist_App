@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     title: "Sign Up",
                     icon: null,
                     backgroundColor: authController.isButtonEnabled.value
-                        ? const Color.fromARGB(255, 15, 74, 224)
+                        ? const Color.fromARGB(255, 15, 22, 39)
                         : const Color.fromARGB(255, 208, 20, 20),
                     textColor: Colors.white,
                     emailController: _emailTextController,
@@ -175,13 +175,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return Container(
           height: MediaQuery.of(context).size.height * 0.75,
           width: MediaQuery.of(context).size.width * 0.9,
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Text(
                 text,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
           ),
