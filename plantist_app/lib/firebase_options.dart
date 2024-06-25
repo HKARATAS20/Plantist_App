@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -59,10 +50,38 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBJU17PBz2I-sMbu-2sr_WjSK4TnLdqm9M',
-    appId: '1:841494925269:ios:395648613a3f44b82d775c',
+    appId: '1:841494925269:ios:251f99b88814eefb2d775c',
     messagingSenderId: '841494925269',
     projectId: 'plantist-c0391',
     storageBucket: 'plantist-c0391.appspot.com',
-    iosBundleId: 'com.example.plantistApp',
+    iosBundleId: 'com.altay.plantistApp',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyC1Ax4SZTQWI6kvnqu-TYwyCc_oGh1qklo',
+    appId: '1:841494925269:web:aed5461b27779bea2d775c',
+    messagingSenderId: '841494925269',
+    projectId: 'plantist-c0391',
+    authDomain: 'plantist-c0391.firebaseapp.com',
+    storageBucket: 'plantist-c0391.appspot.com',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBJU17PBz2I-sMbu-2sr_WjSK4TnLdqm9M',
+    appId: '1:841494925269:ios:251f99b88814eefb2d775c',
+    messagingSenderId: '841494925269',
+    projectId: 'plantist-c0391',
+    storageBucket: 'plantist-c0391.appspot.com',
+    iosBundleId: 'com.altay.plantistApp',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyC1Ax4SZTQWI6kvnqu-TYwyCc_oGh1qklo',
+    appId: '1:841494925269:web:1013c8ef60d1786a2d775c',
+    messagingSenderId: '841494925269',
+    projectId: 'plantist-c0391',
+    authDomain: 'plantist-c0391.firebaseapp.com',
+    storageBucket: 'plantist-c0391.appspot.com',
+  );
+
 }
