@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:plantist_app/utils/notificiation_service.dart';
 import 'todo_model.dart';
 
 class DatabaseManager {
@@ -20,6 +21,18 @@ class DatabaseManager {
         'userId': _currentUser!.uid,
       });
       print('Todo added successfully');
+      NotificationService()
+          .showNotification(title: 'Sample title', body: 'It works!');
+
+      // Schedule notification if time is provided
+      if (time != null) {
+        DateTime scheduleTime =
+            DateTime(date.year, date.month, date.day, time.hour, time.minute);
+        NotificationService().scheduleNotification(
+            title: 'Scheduled Notification',
+            body: 'Scheduled for $scheduleTime',
+            scheduledNotificationDateTime: scheduleTime);
+      }
       return docRef.id;
     } catch (e) {
       print('Error adding todo: $e');

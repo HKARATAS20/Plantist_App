@@ -4,15 +4,17 @@ import 'package:plantist_app/firebase_options.dart';
 import 'package:plantist_app/screens/welcome_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:plantist_app/utils/notificiation_service.dart';
 
-import 'utils/firebase_api.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseApi().initNotifications();
+  NotificationService().initNotification();
+  tz.initializeTimeZones();
   runApp((const GetMaterialApp(
     home: MyApp(),
   )));
