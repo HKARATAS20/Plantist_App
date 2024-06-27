@@ -13,27 +13,27 @@ class AttachmentViewPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Todo Details'),
+        title: const Text('Todo Details'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (todo.notes != null)
+            if (todo.notes != "")
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Notes:',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     todo.notes!,
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                    style: const TextStyle(fontSize: 16, color: Colors.black87),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             if (todo.fileUrl != null) ...[
@@ -41,7 +41,7 @@ class AttachmentViewPage extends StatelessWidget {
                 onPressed: () {
                   _launchURL(todo.fileUrl!);
                 },
-                child: Text('View Attachment on the Web'),
+                child: const Text('View Attachment on the Web'),
               ),
             ],
           ],

@@ -9,7 +9,7 @@ Map<String, List<Todo>> groupTodosByDate(List<Todo> todos) {
   };
 
   final today = DateTime.now();
-  final tomorrow = today.add(Duration(days: 1));
+  final tomorrow = today.add(const Duration(days: 1));
 
   for (final todo in todos) {
     final todoDate = DateTime(todo.date.year, todo.date.month, todo.date.day);

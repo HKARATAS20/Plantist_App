@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plantist_app/reusable_widgets/button/ui_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:plantist_app/screens/sign_in_screen.dart';
 import 'package:plantist_app/screens/sign_up_screen.dart';
 
