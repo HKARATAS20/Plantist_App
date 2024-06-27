@@ -4,7 +4,7 @@ import 'package:plantist_app/firebase_options.dart';
 import 'package:plantist_app/screens/welcome_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:plantist_app/utils/notificiation_service.dart';
+import 'package:plantist_app/utils/notification_service.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
 

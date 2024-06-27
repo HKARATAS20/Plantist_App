@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:plantist_app/utils/todo_model.dart';
 
 class AttachmentViewPage extends StatelessWidget {
-  final String attachmentUrl;
+  final Todo todo;
 
-  const AttachmentViewPage({Key? key, required this.attachmentUrl})
-      : super(key: key);
+  const AttachmentViewPage({Key? key, required this.todo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,18 +13,37 @@ class AttachmentViewPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Attachment View'),
+        title: Text('Todo Details'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                _launchURL(attachmentUrl);
-              },
-              child: Text('View Attachment on the Web'),
-            ),
+            if (todo.notes != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Notes:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    todo.notes!,
+                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+            if (todo.fileUrl != null) ...[
+              ElevatedButton(
+                onPressed: () {
+                  _launchURL(todo.fileUrl!);
+                },
+                child: Text('View Attachment on the Web'),
+              ),
+            ],
           ],
         ),
       ),

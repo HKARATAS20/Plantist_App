@@ -19,39 +19,42 @@ class TodoItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (todo.fileUrl != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AttachmentViewPage(
-                attachmentUrl: todo.fileUrl!,
-              ),
-            ),
-          );
-        }
-      },
-      child: Slidable(
-        key: Key(todo.id),
-        endActionPane: ActionPane(
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (context) => onEdit(todo.id),
-              backgroundColor: CupertinoColors.systemGrey2,
-              foregroundColor: Colors.white,
-              label: 'Edit',
-            ),
-            SlidableAction(
-              onPressed: (context) => onDelete(todo.id),
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-              label: 'Delete',
-            ),
-          ],
-        ),
+    bool hasNotesOrAttachments = todo.notes != "" || todo.fileUrl != null;
+
+    return Slidable(
+      key: Key(todo.id),
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) => onEdit(todo.id),
+            backgroundColor: CupertinoColors.systemGrey2,
+            foregroundColor: Colors.white,
+            label: 'Edit',
+          ),
+          SlidableAction(
+            onPressed: (context) => onDelete(todo.id),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: hasNotesOrAttachments
+            ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AttachmentViewPage(
+                      todo: todo,
+                    ),
+                  ),
+                );
+              }
+            : null,
         child: ListTile(
+          contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           leading: GestureDetector(
             onTap: () async {
               await DatabaseManager.updateTodoCompletion(
@@ -84,7 +87,7 @@ class TodoItemWidget extends StatelessWidget {
 
     if (todo.fileUrl != null) {
       subtitleWidgets.addAll([
-        const Row(
+        Row(
           children: [
             Icon(Icons.attach_file, color: Colors.grey, size: 18),
             SizedBox(width: 4),

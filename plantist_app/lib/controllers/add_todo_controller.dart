@@ -9,7 +9,8 @@ import 'package:plantist_app/utils/database_manager.dart';
 
 class AddTodoController extends GetxController {
   TextEditingController titleController = TextEditingController();
-  TextEditingController notesController = TextEditingController();
+  TextEditingController notesController =
+      TextEditingController(); // Notes controller
   Rx<DateTime> selectedDate = DateTime.now().obs;
   Rx<DateTime> selectedTimeCupertino = DateTime.now().obs;
   RxString selectedPriority = 'None'.obs;
@@ -66,6 +67,11 @@ class AddTodoController extends GetxController {
     titleController.addListener(() {
       update();
     });
+
+    notesController.addListener(() {
+      // Listener for notesController
+      update();
+    });
   }
 
   void toggleDetails() {
@@ -80,9 +86,12 @@ class AddTodoController extends GetxController {
 
   Future<void> addTodo() async {
     String title = titleController.text.trim();
+    String notes = notesController.text.trim(); // Get notes text
+
     if (title.isNotEmpty) {
-      DateTime? dateTime;
-      DateTime? time;
+      DateTime dateTime =
+          enableDate.value ? selectedDate.value : DateTime.now();
+      DateTime? time = enableTime.value ? selectedTimeCupertino.value : null;
 
       if (enableDate.value) {
         dateTime = selectedDate.value;
@@ -95,10 +104,10 @@ class AddTodoController extends GetxController {
       String todoId = '';
       if (showDetails.value) {
         todoId = await DatabaseManager.addTodo(
-            title, false, dateTime!, time, selectedPriority.value);
+            title, notes, false, dateTime, time, selectedPriority.value);
       } else {
         todoId = await DatabaseManager.addTodo(
-            title, false, dateTime!, time, "None");
+            title, notes, false, dateTime, time, "None");
       }
 
       await uploadFile(todoId);
@@ -110,7 +119,7 @@ class AddTodoController extends GetxController {
   @override
   void onClose() {
     titleController.dispose();
-    notesController.dispose();
+    notesController.dispose(); // Dispose notesController
     super.onClose();
   }
 }

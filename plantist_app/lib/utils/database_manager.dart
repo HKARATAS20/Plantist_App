@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:plantist_app/utils/notificiation_service.dart';
+
+import 'package:plantist_app/utils/notification_service.dart';
 import 'todo_model.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseManager {
   static final CollectionReference _todosCollection =
@@ -9,29 +11,48 @@ class DatabaseManager {
 
   static final User? _currentUser = FirebaseAuth.instance.currentUser;
 
-  static Future<String> addTodo(String title, bool completed, DateTime date,
-      DateTime? time, String priority) async {
+  static Future<String> addTodo(String title, String notes, bool completed,
+      DateTime date, DateTime? time, String priority) async {
     try {
+      final uuid = Uuid();
       DocumentReference docRef = await _todosCollection.add({
         'title': title,
+        'notes': notes,
         'completed': completed,
         'date': Timestamp.fromDate(date),
         'time': time != null ? Timestamp.fromDate(time) : null,
         'priority': priority,
         'userId': _currentUser!.uid,
       });
-      print('Todo added successfully');
-      NotificationService()
-          .showNotification(title: 'Sample title', body: 'It works!');
 
-      // Schedule notification if time is provided
       if (time != null) {
         DateTime scheduleTime =
             DateTime(date.year, date.month, date.day, time.hour, time.minute);
-        NotificationService().scheduleNotification(
-            title: 'Scheduled Notification',
-            body: 'Scheduled for $scheduleTime',
-            scheduledNotificationDateTime: scheduleTime);
+        DateTime now = DateTime.now();
+
+        // Notification 24 hours before the scheduled time
+        DateTime twentyFourHoursBefore =
+            scheduleTime.subtract(const Duration(hours: 24));
+        if (twentyFourHoursBefore.isAfter(now)) {
+          NotificationService().scheduleNotification(
+              id: uuid.v4().hashCode,
+              title: 'Reminder: 24 hours to go!',
+              body: title,
+              scheduledNotificationDateTime: twentyFourHoursBefore);
+          print("scheduled for $twentyFourHoursBefore");
+        }
+
+        // Notification 5 minutes before the scheduled time
+        DateTime fiveMinutesBefore =
+            scheduleTime.subtract(const Duration(minutes: 5));
+        if (fiveMinutesBefore.isAfter(now)) {
+          NotificationService().scheduleNotification(
+              id: uuid.v4().hashCode,
+              title: 'Reminder: 5 minutes to go!',
+              body: title,
+              scheduledNotificationDateTime: fiveMinutesBefore);
+          print("scheduled for $fiveMinutesBefore");
+        }
       }
       return docRef.id;
     } catch (e) {

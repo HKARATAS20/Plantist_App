@@ -49,7 +49,9 @@ class AddTodoScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: controller.isButtonEnabled
-                          ? controller.addTodo
+                          ? () {
+                              controller.addTodo();
+                            }
                           : null,
                       child: const Text(
                         'Add',
@@ -67,7 +69,7 @@ class AddTodoScreen extends StatelessWidget {
                             controller: controller.titleController,
                           ),
                           CustomTextField(
-                            placeholder: 'Notes',
+                            placeholder: 'Notes', // Notes text field
                             controller: controller.notesController,
                           ),
                           const SizedBox(height: 16),
